@@ -1,102 +1,47 @@
-export const resolvers = {
-  Query: {
-    authors: () => {
-      return [
-        {
-          id: 1,
-          name: "Rajnish Pandey",
-        },
-        {
-          id: 2,
-          name: "Sophia Brown",
-        },
-        {
-          id: 3,
-          name: "Liam Johnson",
-        },
-        {
-          id: 4,
-          name: "Emma Martinez",
-        },
-        {
-          id: 5,
-          name: "Noah Lee",
-        },
-        {
-          id: 6,
-          name: "Olivia Garcia",
-        },
-        {
-          id: 7,
-          name: "William Davis",
-        },
-        {
-          id: 8,
-          name: "Ava Rodriguez",
-        },
-        {
-          id: 9,
-          name: "James Wilson",
-        },
-        {
-          id: 10,
-          name: "Isabella Moore",
-        },
-      ];
+const data = {
+  authors: [
+    { id: "1", name: "Chirag Goel", bookIds: ["101", "102"] },
+    { id: "2", name: "Akshay Saini", bookIds: ["103"] },
+  ],
+  books: [
+    {
+      id: "101",
+      title: "Namaste Frontend System Design",
+      publishedYear: 2000,
+      authorId: "1",
     },
-    books: () => {
-      return [
-        {
-          id: 1,
-          title: "System Design",
-          publishedYear: 2025,
-        },
-        {
-          id: 2,
-          title: "Frontend System Design",
-          publishedYear: 2026,
-        },
-        {
-          id: 3,
-          title: "Backend Architecture",
-          publishedYear: 2024,
-        },
-        {
-          id: 4,
-          title: "Database Management",
-          publishedYear: 2023,
-        },
-        {
-          id: 5,
-          title: "Cloud Computing Essentials",
-          publishedYear: 2022,
-        },
-        {
-          id: 6,
-          title: "Microservices Patterns",
-          publishedYear: 2021,
-        },
-        {
-          id: 7,
-          title: "DevOps Handbook",
-          publishedYear: 2020,
-        },
-        {
-          id: 8,
-          title: "Machine Learning Basics",
-          publishedYear: 2019,
-        },
-        {
-          id: 9,
-          title: "Introduction to AI",
-          publishedYear: 2018,
-        },
-        {
-          id: 10,
-          title: "Data Structures and Algorithms",
-          publishedYear: 2017,
-        },
-      ];
+    { id: "102", title: "Book 2", publishedYear: 2010, authorId: "1" },
+    { id: "103", title: "Book 3", publishedYear: 2020, authorId: "2" },
+  ],
+};
+
+export const resolvers = {
+  Book: {
+    author: (parent, args, context, info) => {
+      console.log(parent);
+      return data.authors.find(
+        (authorDetail) => authorDetail.id === parent.authorId
+      );
+    },
+  },
+  Author: {
+    books: (parent, args, context, info) => {
+      return data.books.filter((book) => parent.bookIds.includes(book.id));
+    },
+  },
+  Query: {
+    authors: (parent, args, context, info) => {
+      return data.authors;
+    },
+    books: (parent, args, context, info) => {
+      return data.books;
+    },
+  },
+  Mutation: {
+    addBook: (parent, args, context, info) => {
+      const newBook = data.books.push({ ...args, id: data.books.length + 1 });
+      data.books.push(newBook);
+      return newBook;
     },
   },
 };
